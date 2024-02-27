@@ -7,6 +7,9 @@ const app = express();
 //le decimos el puerto en que queremos que corra la aplicación
 const port = 3000;
 
+const { faker } = require("@faker-js/faker");
+
+
 //definimos la ruta
 // tiene un callback que va a ejecutar la respuesta que enviemos al cliente.
 //el callback siempre tiene dos parámetros "req" y "res".
@@ -25,41 +28,22 @@ app.get('/nueva-ruta', (req, res) => {
 '/products' endpoint, the server will respond with a JSON object containing the name 'alfredo' and
 the price 1000. This route is specifically designed to provide information about a product named
 'alfredo' with a price of 1000 when accessed by clients. */
-app.get('/products', (res, req) => {
-    req.json([
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-        {
-            name: 'alfredo',
-            price: 1000
-        },
-    ]);
+app.get('/products', (req, res) => {
+    const { size } = req.query;
+    const limit = size || 10;
+    const products = [];
+    for( let index = 1; index <= limit; index++){
+        
+        products.push({
+			id: index,
+			firstName: faker.person.firstName(),
+			lastName: faker.person.lastName(),
+			gender: faker.person.sexType(),
+            img: faker.image.urlLoremFlickr()
+		});        
+    };
+
+    res.json(products);
 });
 
 /* This code snippet defines a route in the Express application that expects a GET request to a path
@@ -88,6 +72,21 @@ app.get('/categories/:categoryId/products/:productId', (req, res) => {
         ProductId: productId,
         CategoryId: categoryId
     })
+});
+
+app.get('/users', (req, res)=>{
+    const { limit, offset} = req.query;
+    if(limit && offset)
+    {
+        res.json({
+            limit, 
+            offset
+        });
+    }
+    else
+    {
+        res.send('No hay parametros query.');
+    }
 });
 
 //le decimos a la aplicación en que puesto escuchar
