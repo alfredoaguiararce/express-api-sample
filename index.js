@@ -1,5 +1,6 @@
 // traemos a express
 const express = require("express");
+const ProductService = require("./services/product.service");
 
 // creamos una aplicación
 const app = express();
@@ -7,8 +8,7 @@ const app = express();
 //le decimos el puerto en que queremos que corra la aplicación
 const port = 3000;
 
-const { faker } = require("@faker-js/faker");
-
+const productServices = new ProductService()
 
 //definimos la ruta
 // tiene un callback que va a ejecutar la respuesta que enviemos al cliente.
@@ -30,19 +30,8 @@ the price 1000. This route is specifically designed to provide information about
 'alfredo' with a price of 1000 when accessed by clients. */
 app.get('/products', (req, res) => {
     const { size } = req.query;
-    const limit = size || 10;
-    const products = [];
-    for( let index = 1; index <= limit; index++){
-        
-        products.push({
-			id: index,
-			firstName: faker.person.firstName(),
-			lastName: faker.person.lastName(),
-			gender: faker.person.sexType(),
-            img: faker.image.urlLoremFlickr()
-		});        
-    };
-
+    let products = [];
+    products = productServices.get();
     res.json(products);
 });
 
@@ -54,11 +43,8 @@ a price of 1000, and the extracted 'id' value. This route is useful for retrievi
 information based on the provided 'id' parameter. */
 app.get('/products/:id', (req, res) => {
     const {id} = req.params;
-    res.json({
-        name: 'Product 1',
-        price: 1000,
-        id: id
-    })
+    let product = productServices.findById(id);
+    res.json(product)
 });
 
 /* This code snippet defines a route in the Express application that expects a GET request to a path
