@@ -31,22 +31,21 @@ class ProductService{
     
     }
 
-    find()
+    async findById(id)
+    {
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(this.products.find(item => item.id == id));
+            }, 5000);
+        })
+    }
+
+    async delete()
     {
 
     }
 
-    findById(id)
-    {
-        return this.products.find(item => item.id == id);
-    }
-
-    delete()
-    {
-
-    }
-
-    update()
+    async update()
     {
 
     }

@@ -41,9 +41,9 @@ made to this route, the server will extract the value of the 'id' parameter from
 parameters using `req.params`, and then respond with a JSON object containing the name 'Product 1',
 a price of 1000, and the extracted 'id' value. This route is useful for retrieving specific product
 information based on the provided 'id' parameter. */
-app.get('/products/:id', (req, res) => {
+app.get('/products/:id', async (req, res) => {
     const {id} = req.params;
-    let product = productServices.findById(id);
+    let product = await productServices.findById(id);
     res.json(product)
 });
 
